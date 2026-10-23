@@ -68,7 +68,7 @@ Lo script gestisce:
 | Sicurezza | Secret scanning e push protection, Dependabot alerts e security updates, segnalazione privata delle vulnerabilità, CodeQL in default setup (Rust e GitHub Actions). |
 | Merge | Solo squash; il titolo della PR diventa il titolo del commit; il branch viene cancellato dopo il merge. |
 | Actions | `GITHUB_TOKEN` in sola lettura di default; le Actions non possono approvare PR; le PR da fork esterni richiedono approvazione. |
-| Ruleset `main` | Nessuna cancellazione, nessun force push, storia lineare, PR obbligatoria con merge squash, nessun bypass. Check obbligatori (`REQUIRED_CHECKS`, branch aggiornato): `fmt`, `clippy`, `test`, `guardrail`, `compose`, `pr-title`, più i risultati di CodeQL senza alert di gravità alta. |
+| Ruleset `main` | Nessuna cancellazione, nessun force push, storia lineare, PR obbligatoria con merge squash, nessun bypass. Check obbligatori (`REQUIRED_CHECKS`, branch aggiornato): `fmt`, `clippy`, `test`, `deny`, `guardrail`, `compose`, `pr-title`, più i risultati di CodeQL senza alert di gravità alta. |
 | Ruleset `release-tags` | I tag `v*` non si cancellano e non si spostano. |
 | Label | `fase:0`…`fase:5`, `type:*`, `area:*`, `prio:*`. |
 | Milestone | Una per fase e una per ogni checkpoint di design. |

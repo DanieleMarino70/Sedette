@@ -19,7 +19,7 @@ PROJECT_DESCRIPTION="Sedette: motore di analisi dei mercati predittivi on-chain 
 # Check obbligatori su main: i nomi dei job di .github/workflows/ci.yml.
 # Un check richiesto ma mai eseguito bloccherebbe ogni merge: aggiungi un nome
 # qui solo dopo che il job relativo è su main.
-REQUIRED_CHECKS=(fmt clippy test guardrail compose pr-title)
+REQUIRED_CHECKS=(fmt clippy test deny guardrail compose pr-title)
 
 # Richiede i risultati di CodeQL (default setup) prima del merge su main.
 REQUIRE_CODE_SCANNING=1
