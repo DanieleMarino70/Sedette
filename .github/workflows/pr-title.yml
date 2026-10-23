@@ -1,0 +1,33 @@
+name: PR title
+
+# Separato da ci.yml perché deve rigirare anche quando si modifica il titolo
+# (evento `edited`) senza rieseguire build e test.
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions: {}
+
+concurrency:
+  group: pr-title-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  pr-title:
+    name: pr-title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Titolo in formato Conventional Commits
+        # Il titolo arriva via env e non è interpolato nello script:
+        # un titolo con caratteri speciali non può iniettare comandi.
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          pattern='^(feat|fix|docs|refactor|test|chore|ci|perf|build|revert)(\([a-z0-9._/-]+\))?!?: .+'
+          if printf '%s' "$TITLE" | grep -qE "$pattern"; then
+            echo "ok: $TITLE"
+          else
+            echo "::error::Il titolo della PR non segue Conventional Commits: \"$TITLE\""
+            echo "Formato atteso: tipo(ambito opzionale): descrizione, con tipo tra feat, fix, docs, refactor, test, chore, ci, perf, build, revert."
+            exit 1
+          fi

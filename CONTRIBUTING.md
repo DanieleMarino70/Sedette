@@ -34,6 +34,9 @@ Stati della board: **Backlog** (non pianificata) → **Design** (in attesa di un
 ## Qualità del codice
 
 - `cargo fmt`, `cargo clippy -- -D warnings`, test e `cargo deny check` devono passare a ogni PR.
+- [`scripts/ci/guardrail.sh`](scripts/ci/guardrail.sh) fa rispettare i vincoli di sicurezza: niente domini di Polymarket
+  nel codice e nella configurazione, niente signer di alloy, niente file `.env` o URL RPC con chiave versionati. Puoi
+  lanciarlo in locale prima del push.
 - Log con `tracing`; errori con `thiserror` nelle librerie e `anyhow` nei binari.
 - Segreti (URL RPC con chiave, password) **solo** come variabili d'ambiente, mai nel codice o nei file versionati.
 - Ogni crate esterno oltre a quelli previsti dalla specifica va motivato nella PR che lo introduce.
@@ -62,10 +65,10 @@ Lo script gestisce:
 
 | Ambito | Configurazione |
 |---|---|
-| Sicurezza | Secret scanning e push protection, Dependabot alerts e security updates, segnalazione privata delle vulnerabilità. |
+| Sicurezza | Secret scanning e push protection, Dependabot alerts e security updates, segnalazione privata delle vulnerabilità, CodeQL in default setup (Rust e GitHub Actions). |
 | Merge | Solo squash; il titolo della PR diventa il titolo del commit; il branch viene cancellato dopo il merge. |
 | Actions | `GITHUB_TOKEN` in sola lettura di default; le Actions non possono approvare PR; le PR da fork esterni richiedono approvazione. |
-| Ruleset `main` | Nessuna cancellazione, nessun force push, storia lineare, PR obbligatoria con merge squash, nessun bypass. I check di CI obbligatori sono elencati in `REQUIRED_CHECKS`. |
+| Ruleset `main` | Nessuna cancellazione, nessun force push, storia lineare, PR obbligatoria con merge squash, nessun bypass. Check obbligatori (`REQUIRED_CHECKS`, branch aggiornato): `fmt`, `clippy`, `test`, `guardrail`, `compose`, `pr-title`, più i risultati di CodeQL senza alert di gravità alta. |
 | Ruleset `release-tags` | I tag `v*` non si cancellano e non si spostano. |
 | Label | `fase:0`…`fase:5`, `type:*`, `area:*`, `prio:*`. |
 | Milestone | Una per fase e una per ogni checkpoint di design. |
