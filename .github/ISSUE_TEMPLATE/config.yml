@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Segnalazione di vulnerabilità
+    url: https://github.com/DanieleMarino70/Sedette/security/advisories/new
+    about: Per problemi di sicurezza usa la segnalazione privata, non una issue pubblica.

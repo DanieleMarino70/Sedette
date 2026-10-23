@@ -1,0 +1,48 @@
+name: Ricerca
+description: Verifica su fonti ufficiali (contratti, eventi, commissioni, fonti dati, librerie).
+title: "research: "
+labels: ["type:research"]
+projects: ["DanieleMarino70/5"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Non fidarti della memoria: ogni dato va ricavato da una fonte ufficiale e citato con il link (permalink al commit quando possibile).
+  - type: textarea
+    id: domanda
+    attributes:
+      label: Domanda
+      description: Cosa va verificato.
+    validations:
+      required: true
+  - type: textarea
+    id: fonti
+    attributes:
+      label: Fonti ufficiali previste
+      description: Repository GitHub ufficiali, contratti verificati su Polygonscan, documentazione delle librerie su docs.rs.
+    validations:
+      required: true
+  - type: checkboxes
+    id: vincoli
+    attributes:
+      label: Vincoli
+      options:
+        - label: Non consulterò domini polymarket.com né userò VPN, proxy o altri modi per aggirare blocchi geografici.
+          required: true
+        - label: Per ogni dato riporterò la fonte e lo stato (verificato / da verificare).
+          required: true
+  - type: input
+    id: esito
+    attributes:
+      label: Dove si documenta l'esito
+      placeholder: "CONTRACTS.md, docs/metrics.md, un ADR…"
+    validations:
+      required: true
+  - type: textarea
+    id: criteri
+    attributes:
+      label: Criteri di accettazione
+      value: |
+        - [ ]
+    validations:
+      required: true
