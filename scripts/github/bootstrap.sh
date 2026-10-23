@@ -16,9 +16,13 @@ REPO="DanieleMarino70/Sedette"
 PROJECT_TITLE="Sedette"
 PROJECT_DESCRIPTION="Sedette: motore di analisi dei mercati predittivi on-chain (sola lettura) con conto demo"
 
-# Check obbligatori su main (nomi dei job di CI). Restano vuoti finché la CI
-# non esiste: un check richiesto ma mai eseguito bloccherebbe ogni merge (#7).
-REQUIRED_CHECKS=()
+# Check obbligatori su main: i nomi dei job di .github/workflows/ci.yml.
+# Un check richiesto ma mai eseguito bloccherebbe ogni merge: aggiungi un nome
+# qui solo dopo che il job relativo è su main.
+REQUIRED_CHECKS=(fmt clippy test guardrail compose pr-title)
+
+# Richiede i risultati di CodeQL (default setup) prima del merge su main.
+REQUIRE_CODE_SCANNING=1
 
 STATUS_OPTIONS="Backlog,Design,Pronto,In corso,Review,Fatto"
 
@@ -81,6 +85,15 @@ if [ "$(gh api "$R/private-vulnerability-reporting" --jq .enabled)" = "true" ]; 
 else
   change "attivo la segnalazione privata delle vulnerabilità"
   run gh api -X PUT "$R/private-vulnerability-reporting"
+fi
+
+# CodeQL in default setup: le lingue (Rust, GitHub Actions) sono rilevate da GitHub.
+actual=$(gh api "$R/code-scanning/default-setup" --jq '"\(.state) \(.languages | join(","))"')
+if [ "${actual%% *}" = "configured" ]; then
+  ok "CodeQL default setup attivo (${actual#* })"
+else
+  change "attivo CodeQL in default setup (stato: $actual)"
+  run gh api -X PATCH "$R/code-scanning/default-setup" -f state=configured -f query_suite=default
 fi
 
 # --- Merge -------------------------------------------------------------------
@@ -157,6 +170,11 @@ if [ "${#REQUIRED_CHECKS[@]}" -gt 0 ]; then
   status_checks_rule=",{\"type\":\"required_status_checks\",\"parameters\":{\"strict_required_status_checks_policy\":true,\"do_not_enforce_on_create\":false,\"required_status_checks\":[$checks]}}"
 fi
 
+code_scanning_rule=""
+if [ "$REQUIRE_CODE_SCANNING" = 1 ]; then
+  code_scanning_rule=',{"type":"code_scanning","parameters":{"code_scanning_tools":[{"tool":"CodeQL","security_alerts_threshold":"high_or_higher","alerts_threshold":"errors"}]}}'
+fi
+
 upsert_ruleset main <<EOF
 {
   "name": "main",
@@ -175,7 +193,7 @@ upsert_ruleset main <<EOF
       "require_last_push_approval": false,
       "required_review_thread_resolution": false,
       "allowed_merge_methods": ["squash"]
-    }}$status_checks_rule
+    }}$status_checks_rule$code_scanning_rule
   ]
 }
 EOF
