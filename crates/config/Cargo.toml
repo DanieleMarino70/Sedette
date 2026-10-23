@@ -1,0 +1,12 @@
+[package]
+name = "sedette-config"
+description = "Caricamento e validazione della configurazione (sedette.toml e variabili SEDETTE_)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,39 @@
+[workspace]
+resolver = "3"
+members = ["crates/*", "bins/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+# MSRV di alloy 2.x (la dipendenza con il requisito più alto).
+rust-version = "1.94.1"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/DanieleMarino70/Sedette"
+publish = false
+
+[workspace.dependencies]
+# Crate interni
+sedette-analytics = { path = "crates/analytics" }
+sedette-backtest = { path = "crates/backtest" }
+sedette-chain = { path = "crates/chain" }
+sedette-config = { path = "crates/config" }
+sedette-datasource = { path = "crates/datasource" }
+sedette-ingest = { path = "crates/ingest" }
+sedette-markets = { path = "crates/markets" }
+sedette-paper = { path = "crates/paper" }
+sedette-positions = { path = "crates/positions" }
+sedette-signals = { path = "crates/signals" }
+sedette-storage = { path = "crates/storage" }
+sedette-types = { path = "crates/types" }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+dbg_macro = "warn"
+todo = "warn"
+
+[profile.release]
+debug = "line-tables-only"

@@ -1,0 +1,12 @@
+[package]
+name = "sedette-backtest"
+description = "Rigioca lo storico con lo stesso codice di signals e paper"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
