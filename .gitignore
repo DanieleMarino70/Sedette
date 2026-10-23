@@ -1,0 +1,37 @@
+# --- Segreti -----------------------------------------------------------------
+# Le variabili d'ambiente (URL RPC con chiave, password) stanno solo in .env,
+# che non va mai versionato. .env.example contiene solo segnaposto.
+.env
+.env.*
+!.env.example
+
+# --- Build Rust --------------------------------------------------------------
+/target/
+**/*.rs.bk
+
+# --- Dati (mai nel repo pubblico: vedi SECURITY.md, "Politica dei dati") -----
+/data/
+/exports/
+/reports/out/
+*.parquet
+*.duckdb
+*.duckdb.wal
+*.db
+*.sqlite
+*.sqlite3
+*.csv.gz
+*.dump
+*.sql.gz
+*.log
+
+# Volumi locali eventualmente montati come bind mount invece che volumi Docker
+/infra/volumes/
+
+# --- Editor e sistema operativo ----------------------------------------------
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
