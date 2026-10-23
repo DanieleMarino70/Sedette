@@ -1,0 +1,29 @@
+version: 2
+updates:
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+    labels: ["type:chore", "area:infra"]
+    groups:
+      # Aggiornamenti minor e patch in una sola PR; le major restano separate,
+      # perché possono cambiare API (per esempio alloy 2 → 3).
+      cargo-minor-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci(deps)"
+    labels: ["type:chore", "area:infra"]
+    groups:
+      actions:
+        patterns: ["*"]

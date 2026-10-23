@@ -1,0 +1,64 @@
+# Configurazione di cargo-deny: vulnerabilità note, licenze, crate vietati,
+# provenienza delle dipendenze. Documentazione:
+# https://embarkstudios.github.io/cargo-deny/checks/cfg.html
+
+[graph]
+# Analizza anche le feature opzionali (per esempio `clob-adapter`).
+all-features = true
+
+[advisories]
+# Avvisi dal RustSec Advisory Database.
+# Crate non più mantenuti: blocca solo le dipendenze dirette, perché quelle
+# transitive non si possono sostituire da qui. Le vulnerabilità bloccano
+# sempre, a ogni livello.
+unmaintained = "workspace"
+unsound = "all"
+yanked = "deny"
+ignore = []
+
+[licenses]
+# Solo licenze permissive, compatibili con la distribuzione MIT OR Apache-2.0.
+# Una nuova licenza si aggiunge qui con una PR che spiega da quale crate arriva.
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "Unicode-3.0",
+    "CC0-1.0",
+    "CDLA-Permissive-2.0",
+]
+confidence-threshold = 0.93
+exceptions = []
+
+[licenses.private]
+# I crate del workspace hanno publish = false e la loro licenza è nel manifest.
+ignore = true
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+# Le dipendenze path tra i crate del workspace non hanno versione.
+allow-wildcard-paths = true
+# Vincolo della specifica: nessuna chiave privata e nessuna firma di
+# transazioni. Questi crate servono solo a firmare o a gestire chiavi.
+deny = [
+    { crate = "alloy-signer-local", reason = "firma con chiavi private locali: vietato da SECURITY.md" },
+    { crate = "alloy-signer-ledger", reason = "firma con hardware wallet: vietato da SECURITY.md" },
+    { crate = "alloy-signer-trezor", reason = "firma con hardware wallet: vietato da SECURITY.md" },
+    { crate = "alloy-signer-aws", reason = "firma con chiavi in KMS: vietato da SECURITY.md" },
+    { crate = "alloy-signer-gcp", reason = "firma con chiavi in KMS: vietato da SECURITY.md" },
+    { crate = "alloy-signer-turnkey", reason = "firma con chiavi gestite: vietato da SECURITY.md" },
+    { crate = "eth-keystore", reason = "gestione di keystore con chiavi private: vietato da SECURITY.md" },
+    { crate = "coins-bip39", reason = "mnemonic e derivazione di chiavi: vietato da SECURITY.md" },
+    { crate = "coins-bip32", reason = "derivazione di chiavi: vietato da SECURITY.md" },
+]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []
