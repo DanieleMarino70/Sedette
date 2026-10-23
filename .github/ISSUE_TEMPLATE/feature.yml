@@ -1,0 +1,52 @@
+name: Funzionalità
+description: Nuova funzionalità o miglioramento pianificato.
+title: "feat: "
+labels: ["type:feature"]
+projects: ["DanieleMarino70/5"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Descrivi un'attività piccola, completabile idealmente in una sessione.
+        Valgono i vincoli di [SECURITY.md](https://github.com/DanieleMarino70/Sedette/blob/main/SECURITY.md): niente ordini, firme, chiavi private o accesso ai domini di Polymarket.
+        Aggiungi a mano le label `fase:*`, `area:*` e `prio:*` e la milestone.
+  - type: textarea
+    id: contesto
+    attributes:
+      label: Contesto
+      description: Perché serve? Quale fase, issue o decisione la motiva?
+    validations:
+      required: true
+  - type: textarea
+    id: descrizione
+    attributes:
+      label: Descrizione
+      description: Cosa va fatto, concretamente.
+    validations:
+      required: true
+  - type: textarea
+    id: criteri
+    attributes:
+      label: Criteri di accettazione
+      description: Un elenco di condizioni verificabili.
+      value: |
+        - [ ]
+    validations:
+      required: true
+  - type: textarea
+    id: verifica
+    attributes:
+      label: Come si verifica
+      description: Comandi, test o controlli manuali che dimostrano il risultato.
+    validations:
+      required: true
+  - type: textarea
+    id: fuori-scopo
+    attributes:
+      label: Fuori scopo
+      description: Cosa questa issue non fa, per evitare che cresca.
+  - type: input
+    id: dipendenze
+    attributes:
+      label: Dipendenze
+      placeholder: "#12, #13"

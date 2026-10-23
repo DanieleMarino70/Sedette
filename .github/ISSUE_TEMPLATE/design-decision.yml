@@ -1,0 +1,61 @@
+name: Decisione di design
+description: Scelta da prendere a un checkpoint di design o da registrare come ADR.
+title: "design: "
+labels: ["type:design"]
+projects: ["DanieleMarino70/5"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ogni decisione presa diventa un ADR in `docs/adr/NNNN-titolo.md` (formato MADR).
+        La fase successiva si pianifica solo dopo che l'ADR è approvato e fuso in `main`.
+  - type: dropdown
+    id: checkpoint
+    attributes:
+      label: Checkpoint
+      options:
+        - Checkpoint 1 – Design post-ingestione
+        - Checkpoint 2 – Design post-analisi
+        - Checkpoint 3 – Design interfaccia
+        - Fuori dai checkpoint
+    validations:
+      required: true
+  - type: textarea
+    id: contesto
+    attributes:
+      label: Contesto
+      description: Cosa abbiamo imparato, con quali dati e quali limiti. Riporta dimensione del campione e incertezza.
+    validations:
+      required: true
+  - type: textarea
+    id: opzioni
+    attributes:
+      label: Opzioni considerate
+      description: Da 2 a 3 alternative, ognuna con pro e contro.
+      value: |
+        ### Opzione A
+        - Pro:
+        - Contro:
+
+        ### Opzione B
+        - Pro:
+        - Contro:
+    validations:
+      required: true
+  - type: textarea
+    id: raccomandazione
+    attributes:
+      label: Raccomandazione
+      description: L'opzione consigliata e il motivo.
+    validations:
+      required: true
+  - type: textarea
+    id: decisione
+    attributes:
+      label: Decisione
+      description: Da compilare dopo la scelta.
+  - type: input
+    id: adr
+    attributes:
+      label: ADR collegato
+      placeholder: "docs/adr/0007-titolo.md"

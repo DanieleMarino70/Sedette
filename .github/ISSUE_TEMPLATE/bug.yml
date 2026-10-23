@@ -1,0 +1,60 @@
+name: Bug
+description: Comportamento errato da correggere.
+title: "fix: "
+labels: ["type:bug"]
+projects: ["DanieleMarino70/5"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Non incollare segreti**: URL RPC con chiave, password, contenuto di `.env`. Se l'hai già fatto, revoca la chiave.
+        Per una vulnerabilità usa la [segnalazione privata](https://github.com/DanieleMarino70/Sedette/security/advisories/new), non una issue.
+  - type: textarea
+    id: osservato
+    attributes:
+      label: Comportamento osservato
+    validations:
+      required: true
+  - type: textarea
+    id: atteso
+    attributes:
+      label: Comportamento atteso
+    validations:
+      required: true
+  - type: textarea
+    id: passi
+    attributes:
+      label: Passi per riprodurre
+      value: |
+        1.
+    validations:
+      required: true
+  - type: input
+    id: versione
+    attributes:
+      label: Commit o versione
+      description: "`git rev-parse --short HEAD` oppure il tag della release."
+    validations:
+      required: true
+  - type: input
+    id: ambiente
+    attributes:
+      label: Ambiente
+      placeholder: "Windows 11, rustc 1.99.1, Docker Desktop 29.9"
+  - type: dropdown
+    id: dati
+    attributes:
+      label: Tocca dati già acquisiti?
+      description: Se il bug può aver scritto dati errati, andranno ricalcolati.
+      options:
+        - "No"
+        - "Sì, i dati già acquisiti potrebbero essere errati"
+        - "Non so"
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Log
+      description: Estratto dei log rilevanti, senza segreti.
+      render: shell
