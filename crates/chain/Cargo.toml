@@ -1,0 +1,12 @@
+[package]
+name = "sedette-chain"
+description = "Client alloy in sola lettura per Polygon: decodifica degli eventi, reorg e finalità"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
