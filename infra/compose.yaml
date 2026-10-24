@@ -1,0 +1,95 @@
+# Infrastruttura locale di Sedette: Postgres, QuestDB e Grafana.
+#
+# Si avvia dalla radice del repository con `docker compose up -d` (vedi il
+# compose.yaml in radice). Credenziali e password arrivano dal file .env locale
+# (modello in .env.example); se mancano, compose si ferma con un errore.
+#
+# Tutte le porte sono pubblicate solo su 127.0.0.1: i servizi non sono
+# raggiungibili da altre macchine della rete. I dati stanno in volumi Docker
+# con nome, mai dentro il repository.
+
+services:
+  postgres:
+    image: postgres:18.6
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?imposta POSTGRES_USER nel file .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?imposta POSTGRES_PASSWORD nel file .env}
+      POSTGRES_DB: ${POSTGRES_DB:-sedette}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      # Da Postgres 18 i dati stanno in /var/lib/postgresql/18/docker.
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  questdb:
+    image: questdb/questdb:10.1.0
+    restart: unless-stopped
+    environment:
+      # Protocollo PostgreSQL (porta 8812): sostituisce le credenziali predefinite admin/quest.
+      QDB_PG_USER: ${QUESTDB_USER:?imposta QUESTDB_USER nel file .env}
+      QDB_PG_PASSWORD: ${QUESTDB_PASSWORD:?imposta QUESTDB_PASSWORD nel file .env}
+      # Autenticazione HTTP di base per la console web e l'API REST (porta 9000).
+      QDB_HTTP_USER: ${QUESTDB_USER:?imposta QUESTDB_USER nel file .env}
+      QDB_HTTP_PASSWORD: ${QUESTDB_PASSWORD:?imposta QUESTDB_PASSWORD nel file .env}
+      # Il controllo di salute sulla porta 9003, interna al container, non richiede credenziali.
+      QDB_HTTP_HEALTH_CHECK_AUTHENTICATION_REQUIRED: "false"
+      QDB_TELEMETRY_ENABLED: "false"
+    ports:
+      - "127.0.0.1:9000:9000" # console web, API REST, ILP/QWP su HTTP
+      - "127.0.0.1:8812:8812" # protocollo PostgreSQL
+      - "127.0.0.1:9009:9009" # ILP su TCP
+    volumes:
+      - questdb-data:/var/lib/questdb
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://127.0.0.1:9003/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  grafana:
+    image: grafana/grafana:13.2.4
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      questdb:
+        condition: service_healthy
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?imposta GRAFANA_ADMIN_PASSWORD nel file .env}
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: "false"
+      GF_NEWS_NEWS_FEED_ENABLED: "false"
+      # Usate dal provisioning dei datasource (provisioning/datasources/sedette.yaml).
+      POSTGRES_USER: ${POSTGRES_USER:?imposta POSTGRES_USER nel file .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?imposta POSTGRES_PASSWORD nel file .env}
+      POSTGRES_DB: ${POSTGRES_DB:-sedette}
+      QUESTDB_USER: ${QUESTDB_USER:?imposta QUESTDB_USER nel file .env}
+      QUESTDB_PASSWORD: ${QUESTDB_PASSWORD:?imposta QUESTDB_PASSWORD nel file .env}
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  postgres-data:
+  questdb-data:
+  grafana-data:

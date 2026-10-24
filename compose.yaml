@@ -1,0 +1,8 @@
+# Avvio rapido dalla radice del repository: `docker compose up -d`.
+# I servizi sono definiti in infra/compose.yaml; le variabili si leggono dal
+# file .env in radice (modello in .env.example).
+name: sedette
+
+include:
+  - path: infra/compose.yaml
+    env_file: .env

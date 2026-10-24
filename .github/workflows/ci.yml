@@ -94,9 +94,8 @@ jobs:
         with:
           persist-credentials: false
       - name: Valida il file compose
+        # In CI non c'è un .env: si usano i segnaposto di .env.example, che
+        # devono bastare a validare tutte le variabili obbligatorie.
         run: |
-          if [ ! -f compose.yaml ]; then
-            echo "compose.yaml non esiste ancora (arriva con la issue #12): controllo saltato"
-            exit 0
-          fi
+          cp .env.example .env
           docker compose config --quiet
