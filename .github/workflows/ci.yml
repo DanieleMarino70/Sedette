@@ -61,6 +61,8 @@ jobs:
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
       # I test che richiedono un RPC reale sono #[ignore] e qui non girano.
       - run: cargo test --workspace --all-features --locked
+      # Con le feature predefinite: verifica che l'adapter CLOB non sia compilato.
+      - run: cargo test -p sedette-datasource --locked
 
   deny:
     name: deny

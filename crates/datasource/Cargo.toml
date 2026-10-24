@@ -8,5 +8,15 @@ license.workspace = true
 repository.workspace = true
 publish.workspace = true
 
+[features]
+# Adapter per il CLOB di Polymarket: NON implementato e disabilitato.
+# Da attivare solo in una giurisdizione in cui l'uso è legale.
+# Anche se attivata, la feature non aggiunge client di rete né URL.
+clob-adapter = []
+
+[dependencies]
+sedette-types.workspace = true
+thiserror.workspace = true
+
 [lints]
 workspace = true

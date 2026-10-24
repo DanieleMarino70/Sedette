@@ -28,6 +28,8 @@ sedette-types = { path = "crates/types" }
 
 # Dipendenze esterne. Quelle non previste dalla specifica sono motivate in
 # docs/adr/ e nella PR che le introduce.
+# Tipi primitivi EVM (B256, U256, Address): parte di alloy, compatibile con alloy 2.x.
+alloy-primitives = "1.7.3"
 config = { version = "0.15.27", default-features = false, features = ["toml"] }
 serde = { version = "1.0.229", features = ["derive"] }
 thiserror = "2.0.21"
