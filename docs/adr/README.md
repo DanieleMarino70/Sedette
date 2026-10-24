@@ -17,4 +17,9 @@ Ogni decisione di architettura o di metodo presa nel progetto è registrata qui,
 
 | ADR | Titolo | Stato |
 |---|---|---|
-| — | Nessun ADR ancora registrato | — |
+| [0001](0001-repo-pubblico-sicurezza-e-dati.md) | Repository pubblico, sistema di sicurezza e politica dei dati | accettato |
+| [0002](0002-alloy-2.md) | alloy 2.x invece della 1.x indicata nella specifica | accettato |
+| [0003](0003-fonti-e-vincoli-polymarket.md) | Fonti per contratti ed eventi, vincoli su Polymarket e fornitori di dati | accettato |
+| [0004](0004-scelte-di-stack-minori.md) | Scelte di stack minori della Fase 0 | accettato |
+| [0005](0005-processo-github-e-release.md) | Processo di lavoro su GitHub e release | accettato |
+| [0006](0006-finalita-su-polygon.md) | Quando considerare definitivo un blocco su Polygon PoS | proposto |
