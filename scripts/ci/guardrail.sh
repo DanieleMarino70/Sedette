@@ -36,7 +36,8 @@ done
 scan "riferimenti ai domini di Polymarket" -nIiE 'polymarket\.com' -- "${paths[@]}" ':!scripts/ci/guardrail.sh'
 
 # 2. Signer di alloy: nelle feature dei manifest e nel lockfile.
-scan "feature o dipendenze di firma nei Cargo.toml" -nE 'signer' -- 'Cargo.toml' '**/Cargo.toml'
+# Solo righe non commentate: i commenti possono spiegare il divieto.
+scan "feature o dipendenze di firma nei Cargo.toml" -nE '^[^#]*signer' -- 'Cargo.toml' '**/Cargo.toml'
 scan "crate signer di alloy nel Cargo.lock" -nE '^name = "alloy-signer-[a-z0-9-]+"' -- 'Cargo.lock'
 
 # 3. File .env versionati.

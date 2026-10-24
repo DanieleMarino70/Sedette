@@ -28,9 +28,24 @@ sedette-types = { path = "crates/types" }
 
 # Dipendenze esterne. Quelle non previste dalla specifica sono motivate in
 # docs/adr/ e nella PR che le introduce.
+# Lettura della chain in sola lettura. Niente feature predefinite: includerebbero
+# `signer-local` (firma con chiavi private), vietato dalla specifica.
+alloy = { version = "2.5.0", default-features = false, features = [
+    "std",
+    "reqwest",
+    "reqwest-rustls-tls",
+    "provider-http",
+    "provider-ws",
+    "rpc-types",
+] }
 # Tipi primitivi EVM (B256, U256, Address): parte di alloy, compatibile con alloy 2.x.
 alloy-primitives = "1.7.3"
+anyhow = "1.0.104"
 config = { version = "0.15.27", default-features = false, features = ["toml"] }
+# Carica il file .env locale nei binari, senza modificare l'ambiente del processo.
+dotenvy = "0.15.7"
+futures-util = "0.3.34"
+tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "signal", "time"] }
 serde = { version = "1.0.229", features = ["derive"] }
 thiserror = "2.0.21"
 tracing = "0.1.44"
