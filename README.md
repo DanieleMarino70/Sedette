@@ -84,7 +84,7 @@ docs/           specifica, ADR, checkpoint di design, metriche
 | Documento | Contenuto |
 |---|---|
 | [docs/PROMPT.md](docs/PROMPT.md) | Specifica del progetto: vincoli, fasi, criteri di completamento. |
-| `CONTRACTS.md` | Indirizzi, eventi e fonti ufficiali dei contratti on-chain (in arrivo con la issue #5). |
+| [CONTRACTS.md](CONTRACTS.md) | Indirizzi, eventi e fonti ufficiali dei contratti on-chain. |
 | [docs/adr/](docs/adr/README.md) | Architecture Decision Record. |
 | [docs/design/](docs/design/README.md) | Documenti dei checkpoint di design. |
 | [docs/metrics.md](docs/metrics.md) | Definizione di metriche e archetipi. |
