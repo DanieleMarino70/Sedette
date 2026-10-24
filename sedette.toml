@@ -1,0 +1,33 @@
+# Configurazione di Sedette.
+#
+# Questo file è versionato: NON contiene segreti. Gli URL RPC (che includono la
+# chiave del provider) e le password arrivano solo da variabili d'ambiente, di
+# solito dal file .env locale (vedi .env.example). Se `rpc.ws_url` o
+# `rpc.http_url` compaiono qui, il caricamento fallisce.
+#
+# Ogni valore si può sovrascrivere con una variabile d'ambiente:
+# SEDETTE_<SEZIONE>__<CHIAVE>, per esempio SEDETTE_LOGGING__FORMAT=json.
+
+[chain]
+# Polygon PoS mainnet: l'unica rete supportata.
+expected_chain_id = 137
+
+[finality]
+# Valori provvisori: la regola di finalità si decide nel piano della Fase 1.
+# Profondità minima, in blocchi, per considerare definitivo un blocco.
+confirmations = 32
+# Considera definitivi anche i blocchi sotto il tag RPC `finalized`.
+use_finalized_tag = true
+
+[logging]
+# "pretty" per lo sviluppo, "json" per la raccolta dei log.
+format = "pretty"
+# Sintassi di tracing_subscriber::EnvFilter, per esempio "info,sedette_chain=debug".
+filter = "info"
+
+[ingestor]
+# Ogni quanti secondi leggere il blocco `finalized` e registrarne il ritardo.
+finalized_poll_secs = 30
+# Riconnessione con backoff esponenziale: attesa iniziale e massima.
+reconnect_initial_backoff_ms = 500
+reconnect_max_backoff_secs = 60

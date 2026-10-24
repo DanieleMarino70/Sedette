@@ -26,6 +26,14 @@ sedette-signals = { path = "crates/signals" }
 sedette-storage = { path = "crates/storage" }
 sedette-types = { path = "crates/types" }
 
+# Dipendenze esterne. Quelle non previste dalla specifica sono motivate in
+# docs/adr/ e nella PR che le introduce.
+config = { version = "0.15.27", default-features = false, features = ["toml"] }
+serde = { version = "1.0.229", features = ["derive"] }
+thiserror = "2.0.21"
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter", "json"] }
+
 [workspace.lints.rust]
 unsafe_code = "forbid"
 missing_docs = "warn"
