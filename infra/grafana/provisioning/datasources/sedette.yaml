@@ -1,0 +1,33 @@
+# Datasource di Sedette, creati all'avvio di Grafana. Le credenziali arrivano
+# dalle variabili d'ambiente del container (vedi infra/compose.yaml).
+apiVersion: 1
+
+datasources:
+  # Dati relazionali: mercati, wallet, posizioni, ledger del conto demo.
+  - name: Sedette Postgres
+    uid: sedette-postgres
+    type: grafana-postgresql-datasource
+    access: proxy
+    url: postgres:5432
+    user: $POSTGRES_USER
+    jsonData:
+      database: $POSTGRES_DB
+      sslmode: disable
+    secureJsonData:
+      password: $POSTGRES_PASSWORD
+    editable: false
+
+  # Serie temporali: trade, prezzi per esito, volumi. QuestDB parla il
+  # protocollo PostgreSQL sulla porta 8812, quindi basta il datasource integrato.
+  - name: Sedette QuestDB
+    uid: sedette-questdb
+    type: grafana-postgresql-datasource
+    access: proxy
+    url: questdb:8812
+    user: $QUESTDB_USER
+    jsonData:
+      database: qdb
+      sslmode: disable
+    secureJsonData:
+      password: $QUESTDB_PASSWORD
+    editable: false
