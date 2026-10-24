@@ -5,6 +5,15 @@
 [graph]
 # Analizza anche le feature opzionali (per esempio `clob-adapter`).
 all-features = true
+# Solo le piattaforme per cui si compila: CI e container Linux, sviluppo su
+# Windows e macOS. Esclude le dipendenze specifiche di wasm32 (per esempio
+# ws_stream_wasm di alloy-transport-ws), che non entrano mai nei binari.
+targets = [
+    "x86_64-unknown-linux-gnu",
+    "aarch64-unknown-linux-gnu",
+    "x86_64-pc-windows-msvc",
+    "aarch64-apple-darwin",
+]
 
 [advisories]
 # Avvisi dal RustSec Advisory Database.
@@ -14,7 +23,15 @@ all-features = true
 unmaintained = "workspace"
 unsound = "all"
 yanked = "deny"
-ignore = []
+# Ogni eccezione ha un motivo e va rimossa appena la dipendenza si aggiorna.
+ignore = [
+    # crypto-bigint 0.5.5: canali laterali di temporizzazione su interi segreti.
+    # Arriva da elliptic-curve 0.13 tramite alloy-signer (solo il trait, usato da
+    # alloy-network) e non si può aggiornare finché alloy non passa a
+    # crypto-bigint >= 0.7.6. Sedette non elabora chiavi né firme: il codice
+    # vulnerabile non tocca segreti. Rimuovere quando `cargo deny` non lo segnala più.
+    { id = "RUSTSEC-2026-0387", reason = "solo via alloy-signer (trait); Sedette non gestisce chiavi né firme" },
+]
 
 [licenses]
 # Solo licenze permissive, compatibili con la distribuzione MIT OR Apache-2.0.
