@@ -3,8 +3,10 @@
 Motore di analisi dei mercati predittivi di Polymarket basato **esclusivamente su dati pubblici on-chain** (Polygon PoS),
 con un **conto demo** (paper trading) che simula strategie con un bankroll virtuale.
 
-> **Stato:** Fase 0 (scheletro) in corso. L'avanzamento è sulla [board](https://github.com/users/DanieleMarino70/projects/5)
-> e nelle [milestone](https://github.com/DanieleMarino70/Sedette/milestones).
+> **Stato:** Fase 0 (scheletro) completata con la release `v0.1.0`: infrastruttura locale, configurazione, CI e un
+> ingestor che segue i nuovi blocchi di Polygon. Prossimo passo: piano della Fase 1 (ingestione degli eventi on-chain).
+> L'avanzamento è sulla [board](https://github.com/users/DanieleMarino70/projects/5) e nelle
+> [milestone](https://github.com/DanieleMarino70/Sedette/milestones); le novità sono in [CHANGELOG.md](CHANGELOG.md).
 
 ## Obiettivi
 
