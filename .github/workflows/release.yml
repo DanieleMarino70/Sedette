@@ -1,0 +1,37 @@
+name: Release
+
+# Pubblica la GitHub Release quando si crea un tag vX.Y.Z sul commit di merge
+# della PR `chore(release): vX.Y.Z` (vedi CONTRIBUTING.md). I tag v* sono
+# protetti dal ruleset `release-tags`: non si cancellano né si spostano.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    name: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # solo per creare la GitHub Release
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Note di rilascio
+        uses: orhun/git-cliff-action@a9a95522b26fe6403f7bb24031f21fb573d0f5ff # v4.9.1
+        with:
+          config: cliff.toml
+          args: --latest --strip header
+        env:
+          OUTPUT: RELEASE_NOTES.md
+
+      - name: Pubblica la release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "Sedette $TAG" --notes-file RELEASE_NOTES.md --verify-tag

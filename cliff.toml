@@ -1,0 +1,56 @@
+# Configurazione di git-cliff: genera CHANGELOG.md e le note di rilascio dai
+# commit in formato Conventional Commits (titoli delle PR, merge squash).
+# Uso: git cliff --tag vX.Y.Z -o CHANGELOG.md
+# Documentazione: https://git-cliff.org/docs/configuration
+
+[changelog]
+header = """
+# Changelog
+
+Tutte le modifiche rilevanti di Sedette. Una versione per fase: `v0.1.0` chiude la Fase 0, `v0.2.0` la Fase 1, e così via.
+Il file è generato da [git-cliff](https://git-cliff.org/) a partire dai commit in formato
+[Conventional Commits](https://www.conventionalcommits.org/it/v1.0.0/).
+
+"""
+body = """
+{% if version %}\
+## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
+{% else %}\
+## [Non rilasciato]
+{% endif %}\
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | striptags | trim | upper_first }}
+{% for commit in commits %}
+- {% if commit.scope %}*({{ commit.scope }})* {% endif %}{{ commit.message }}\
+{% endfor %}
+{% endfor %}\n
+"""
+trim = true
+footer = ""
+
+[git]
+conventional_commits = true
+# Il commit iniziale e gli altri commit non convenzionali restano fuori.
+filter_unconventional = true
+split_commits = false
+commit_preprocessors = [
+    # "(#24)" alla fine del titolo diventa un link alla PR.
+    { pattern = '\(#([0-9]+)\)', replace = "([#${1}](https://github.com/DanieleMarino70/Sedette/pull/${1}))" },
+]
+commit_parsers = [
+    { message = "^feat", group = "<!-- 0 -->Funzionalità" },
+    { message = "^fix", group = "<!-- 1 -->Correzioni" },
+    { message = "^perf", group = "<!-- 2 -->Prestazioni" },
+    { message = "^refactor", group = "<!-- 3 -->Refactoring" },
+    { message = "^docs", group = "<!-- 4 -->Documentazione" },
+    { message = "^test", group = "<!-- 5 -->Test" },
+    { message = "^ci", group = "<!-- 6 -->CI" },
+    { message = "^chore\\(release\\)", skip = true },
+    { message = "^chore\\(deps\\)", group = "<!-- 7 -->Dipendenze" },
+    { message = "^(chore|build)", group = "<!-- 8 -->Manutenzione" },
+    { message = "^revert", group = "<!-- 9 -->Annullamenti" },
+]
+protect_breaking_commits = false
+filter_commits = false
+tag_pattern = "v[0-9].*"
+sort_commits = "oldest"
